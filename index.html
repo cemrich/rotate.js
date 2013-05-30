@@ -37,11 +37,9 @@ var speed = 0.25;
 */
 
 function displayRotation(event) {
-	var upsideDownFak = (event.rotation.y < 90 && event.rotation.y > -90) ? 1 : -1;
-	
-	var newRotX = event.rotation.x*upsideDownFak;
-	var newRotY = event.rotation.y*-1
-	var newRotZ = event.rotation.z;
+	var newRotX = (event.rotation.x*-1 + 360) % 360;
+	var newRotY = (event.rotation.y*-1 + 360) % 360;
+	var newRotZ = (event.rotation.z*-1 + 360) % 360;
 	
 	/*
 	// smoothing
@@ -57,17 +55,17 @@ function displayRotation(event) {
 	lastRotZ = newRotZ;
 	*/
 	
-	var rotXCss = 'rotateX('+ (newRotX) +'deg)';
-	var rotYCss = 'rotateY('+ (newRotY) +'deg)';
-	var rotZCss = 'rotateZ('+ (newRotZ) +'deg)';
+	var rotXCss = 'rotatex('+ (newRotX) +'deg)';
+	var rotYCss = 'rotatey('+ (newRotY) +'deg)';
+	var rotZCss = 'rotatez('+ (newRotZ) +'deg)';
 	
-	degLabel.text('Window-Orientation: ' + window.orientation);
+	degLabel.text('Window-Orientation: ' + event.orientation);
 	xLabel.text('X: ' + Math.round(newRotX));
 	yLabel.text('Y: ' + Math.round(newRotY));
 	zLabel.text('Z: ' + Math.round(newRotZ));
-	
-	rotationIndicator.css('webkitTransform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
-	rotationIndicatorBack.css('webkitTransform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
+
+	rotationIndicator.css('transform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
+	rotationIndicatorBack.css('transform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
 }
 
 function handleVisibilityChange(event) {

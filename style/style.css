@@ -14,7 +14,9 @@ body {
 	overflow: hidden;
 	background: #333;
 	-webkit-perspective: 700px;
+	perspective: 700px;
 	-webkit-perspective-origin: 50% 50%;
+	perspective-origin: 50% 50%;
 }
 
 #rotation_indicator, #rotation_indicator_back {
@@ -30,10 +32,12 @@ body {
 }
 
 #rotation_indicator {
+	backface-visibility: hidden;
 	-webkit-backface-visibility: hidden;
 }
 
 #rotation_indicator_back {
+	-moz-filter: grayscale(100%);
 	-webkit-filter: grayscale(100%);
 }
 

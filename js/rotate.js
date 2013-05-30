@@ -3,6 +3,9 @@
 	function Rotate() {
 		//feature detect
 		this.hasDeviceOrientation = 'DeviceOrientationEvent' in window;
+		if (!this.hasDeviceOrientation) {
+			console.error('rotate.js: This browser does not support device orientation.');
+		}
 		
 		//create custom event
 		if (typeof CustomEvent === "function") {
@@ -16,6 +19,7 @@
 			this.event.rotation = {};
 			this.event.initEvent('rotate', true, true);
 		} else {
+			console.error('rotate.js: No custom event could be created.');
 			return false;
 		}
 	}
@@ -33,7 +37,7 @@
 	};
 
 	//stop listening for deviceorientation
-	Rotate.prototype.stop = function () {		
+	Rotate.prototype.stop = function () {
 		if (this.hasDeviceOrientation) {
 			window.removeEventListener('deviceorientation', this);
 		}
@@ -42,29 +46,39 @@
 
 	//calculates if rotate did occur
 	Rotate.prototype.deviceorientation = function (e) {
-		var rotX = event.beta;
-		var rotY = event.gamma;
-		var rotZ = event.alpha;
+		var rotX = e.beta;
+		var rotY = e.gamma;
+		var rotZ = e.alpha;
+		var orientation = window.orientation || 0;
 		
-		if (window.orientation == 90) {
+		if (orientation == 90) {
 			var tempY = rotY;
 			rotY = rotX;
 			rotX = -tempY;
 			rotZ -= 90;
-		} else if (window.orientation == 180) {
+		} else if (orientation == 180) {
 			rotX *= -1;
 			rotY *= -1;
 			rotZ -= 180;
-		} else if (window.orientation == -90 || window.orientation == 270) {
+		} else if (orientation == -90 || orientation == 270) {
 			var tempY = rotY;
 			rotY = -rotX;
 			rotX = tempY;
 			rotZ += 90;
 		}
 		
+		var upsideDownFak = (rotY < 90 && rotY > -90) ? -1 : 1;
+		rotX = rotX*upsideDownFak + 360;
+		rotZ = rotZ*-1;
+		
+		rotX = (rotX + 360) % 360;
+		rotY = (rotY + 360) % 360;
+		rotZ = (rotZ + 360) % 360;
+		
 		this.event.rotation.x = rotX;
 		this.event.rotation.y = rotY;
-		this.event.rotation.z = rotZ;
+		this.event.rotation.z = rotZ; 
+		this.event.orientation = orientation; 
 		window.dispatchEvent(this.event);
 	};
 
