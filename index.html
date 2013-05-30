@@ -6,6 +6,7 @@
 	<title>Roatation Api</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 	<script src="libs/jquery-2.0.0.min.js"></script>
+	<script src="js/rotate.js"></script>
 	<link rel="stylesheet" type="text/css" href="style/style.css">
 </head>
 
@@ -35,37 +36,12 @@ var lastRotZ = 0;
 var speed = 0.25;
 */
 
-function onDeviceOrientationChange(event) {
-	var rotX = event.beta;
-	var rotY = event.gamma;
-	var rotZ = event.alpha;
+function displayRotation(event) {
+	var upsideDownFak = (event.rotation.y < 90 && event.rotation.y > -90) ? 1 : -1;
 	
-	if (window.orientation == 90) {
-		var tempY = rotY;
-		rotY = rotX;
-		rotX = -tempY;
-		rotZ -= 90;
-	} else if (window.orientation == 180) {
-		rotX *= -1;
-		rotY *= -1;
-		rotZ -= 180;
-	} else if (window.orientation == -90 || window.orientation == 270) {
-		var tempY = rotY;
-		rotY = -rotX;
-		rotX = tempY;
-		rotZ += 90;
-	}
-	
-	//displayRotation(rotX%360, rotY%360, rotZ%360);
-	displayRotation(rotX, rotY, rotZ);
-}
-
-function displayRotation(rotX, rotY, rotZ) {
-	var upsideDownFak = (rotY < 90 && rotY > -90) ? 1 : -1;
-	
-	var newRotX = rotX*upsideDownFak;
-	var newRotY = rotY*-1
-	var newRotZ = rotZ;
+	var newRotX = event.rotation.x*upsideDownFak;
+	var newRotY = event.rotation.y*-1
+	var newRotZ = event.rotation.z;
 	
 	/*
 	// smoothing
@@ -95,7 +71,7 @@ function displayRotation(rotX, rotY, rotZ) {
 }
 
 function init() {
-	window.addEventListener('deviceorientation', onDeviceOrientationChange); // Gyroscope
+	window.addEventListener('rotate', displayRotation);
 }
 
 window.onload = init;
