@@ -21,6 +21,16 @@
 
 <script type="text/javascript">
 
+var visibilityEvent = 'visibilitychange';
+var hiddenProperty = 'hidden';
+if (typeof(document.webkitHidden) !== 'undefined') {
+	visibilityEvent = 'webkitvisibilitychange';
+	hiddenProperty = 'webkitHidden';
+} else if (typeof(document.mozHidden) !== 'undefined') {
+	visibilityEvent = 'mozvisibilitychange';
+	hiddenProperty = 'mozHidden';
+}
+
 var rotationIndicator = $('#rotation_indicator');
 var rotationIndicatorBack = $('#rotation_indicator_back');
 var degLabel = $('#degrees');
@@ -28,32 +38,10 @@ var xLabel = $('#x');
 var yLabel = $('#y');
 var zLabel = $('#z');
 
-/*
-// smoothing
-var lastRotX = 0;
-var lastRotY = 0;
-var lastRotZ = 0;
-var speed = 0.25;
-*/
-
 function displayRotation(event) {
 	var newRotX = (event.rotation.x*-1 + 360) % 360;
 	var newRotY = (event.rotation.y*-1 + 360) % 360;
 	var newRotZ = (event.rotation.z*-1 + 360) % 360;
-	
-	/*
-	// smoothing
-	newRotX = (lastRotX+360) * (1 - speed) + (newRotX+360) * speed;
-	newRotY = (lastRotY+360) * (1 - speed) + (newRotY+360) * speed;
-	newRotZ = (lastRotZ+360) * (1 - speed) + (newRotZ+360) * speed;
-	newRotX = newRotX % 360;
-	newRotY = newRotY % 360;
-	newRotZ = newRotZ % 360;
-	
-	lastRotX = newRotX;
-	lastRotY = newRotY
-	lastRotZ = newRotZ;
-	*/
 	
 	var rotXCss = 'rotatex('+ (newRotX) +'deg)';
 	var rotYCss = 'rotatey('+ (newRotY) +'deg)';
@@ -69,7 +57,7 @@ function displayRotation(event) {
 }
 
 function handleVisibilityChange(event) {
-	if (document['webkitHidden']) {
+	if (document[hiddenProperty]) {
 		window.removeEventListener('rotate', displayRotation);
 	} else {
 		window.addEventListener('rotate', displayRotation);
@@ -77,7 +65,7 @@ function handleVisibilityChange(event) {
 }
 
 function init() {
-	document.addEventListener('webkitvisibilitychange', handleVisibilityChange, false);
+	document.addEventListener(visibilityEvent, handleVisibilityChange, false);
 	window.addEventListener('rotate', displayRotation);
 }
 

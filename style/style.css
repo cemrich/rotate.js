@@ -37,7 +37,6 @@ body {
 }
 
 #rotation_indicator_back {
-	-moz-filter: grayscale(100%);
 	-webkit-filter: grayscale(100%);
 }
 
