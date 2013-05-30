@@ -70,7 +70,16 @@ function displayRotation(event) {
 	rotationIndicatorBack.css('webkitTransform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
 }
 
+function handleVisibilityChange(event) {
+	if (document['webkitHidden']) {
+		window.removeEventListener('rotate', displayRotation);
+	} else {
+		window.addEventListener('rotate', displayRotation);
+	}
+}
+
 function init() {
+	document.addEventListener('webkitvisibilitychange', handleVisibilityChange, false);
 	window.addEventListener('rotate', displayRotation);
 }
 
