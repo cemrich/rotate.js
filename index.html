@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Roatation Api</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+<script src="libs/jquery-2.0.0.min.js"></script>
+<style>
+
+html {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+body
+{
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	background: #333;
+	-webkit-perspective: 700px;
+	-webkit-perspective-origin: 50% 50%;
+}
+
+#rotation_indicator, #rotation_indicator_back {
+	position: absolute;
+	top: 0;
+	height: 0;
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-position: center center;
+}
+
+#rotation_indicator {
+	background-image: url('img/hand.svg');
+	-webkit-backface-visibility: hidden;
+}
+#rotation_indicator_back {
+	background-image: url('img/hand_back.svg');
+}
+
+.label
+{
+    font-family: sans-serif;
+    color: #ccc;
+    text-shadow: 2px 2px 5px #000;
+    padding: 0.2em;
+    margin: 0;
+}
+
+</style>
+
+</head>
+
+<body>
+	<div id="rotation_indicator_back"></div>
+	<div id="rotation_indicator"></div>
+	<div id="degrees" class="label"></div>
+	<div id="x" class="label"></div>
+	<div id="y" class="label"></div>
+	<div id="z" class="label"></div>
+</body>
+
+<script type="text/javascript">
+
+var rotationIndicator = $('#rotation_indicator');
+var rotationIndicatorBack = $('#rotation_indicator_back');
+var degLabel = $('#degrees');
+var xLabel = $('#x');
+var yLabel = $('#y');
+var zLabel = $('#z');
+
+/*
+// smoothing
+var lastRotX = 0;
+var lastRotY = 0;
+var lastRotZ = 0;
+var speed = 0.25;
+*/
+
+function onDeviceOrientationChange(event) {
+	var rotX = event.beta;
+	var rotY = event.gamma;
+	var rotZ = event.alpha;
+	
+	if (window.orientation == 90) {
+		var tempY = rotY;
+		rotY = rotX;
+		rotX = -tempY;
+		rotZ -= 90;
+	} else if (window.orientation == 180) {
+		rotX *= -1;
+		rotY *= -1;
+		rotZ -= 180;
+	} else if (window.orientation == -90 || window.orientation == 270) {
+		var tempY = rotY;
+		rotY = -rotX;
+		rotX = tempY;
+		rotZ += 90;
+	}
+	
+	//displayRotation(rotX%360, rotY%360, rotZ%360);
+	displayRotation(rotX, rotY, rotZ);
+}
+
+function displayRotation(rotX, rotY, rotZ) {
+	var upsideDownFak = (rotY < 90 && rotY > -90) ? 1 : -1;
+	
+	var newRotX = rotX*upsideDownFak;
+	var newRotY = rotY*-1
+	var newRotZ = rotZ;
+	
+	/*
+	// smoothing
+	newRotX = (lastRotX+360) * (1 - speed) + (newRotX+360) * speed;
+	newRotY = (lastRotY+360) * (1 - speed) + (newRotY+360) * speed;
+	newRotZ = (lastRotZ+360) * (1 - speed) + (newRotZ+360) * speed;
+	newRotX = newRotX % 360;
+	newRotY = newRotY % 360;
+	newRotZ = newRotZ % 360;
+	
+	lastRotX = newRotX;
+	lastRotY = newRotY
+	lastRotZ = newRotZ;
+	*/
+	
+	var rotXCss = 'rotateX('+ (newRotX) +'deg)';
+	var rotYCss = 'rotateY('+ (newRotY) +'deg)';
+	var rotZCss = 'rotateZ('+ (newRotZ) +'deg)';
+	
+	degLabel.text('Window-Orientation: ' + window.orientation);
+	xLabel.text('X: ' + Math.round(newRotX));
+	yLabel.text('Y: ' + Math.round(newRotY));
+	zLabel.text('Z: ' + Math.round(newRotZ));
+	
+	rotationIndicator.css('webkitTransform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
+	rotationIndicatorBack.css('webkitTransform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
+}
+
+function init() {
+	window.addEventListener('deviceorientation', onDeviceOrientationChange); // Gyroscope
+}
+
+window.onload = init;
+
+</script>
+
+</html>
