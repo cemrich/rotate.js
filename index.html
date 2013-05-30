@@ -41,16 +41,16 @@ var zLabel = $('#z');
 function displayRotation(event) {
 	var newRotX = (event.rotation.x*-1 + 360) % 360;
 	var newRotY = (event.rotation.y*-1 + 360) % 360;
-	var newRotZ = (event.rotation.z*-1 + 360) % 360;
+	var newRotZ = (event.rotation.z*-1 + 360) % 360; 
 	
 	var rotXCss = 'rotatex('+ (newRotX) +'deg)';
 	var rotYCss = 'rotatey('+ (newRotY) +'deg)';
 	var rotZCss = 'rotatez('+ (newRotZ) +'deg)';
 	
 	degLabel.text('Window-Orientation: ' + event.orientation);
-	xLabel.text('X: ' + Math.round(newRotX));
-	yLabel.text('Y: ' + Math.round(newRotY));
-	zLabel.text('Z: ' + Math.round(newRotZ));
+	xLabel.text('X: ' + Math.round(event.rotation.x));
+	yLabel.text('Y: ' + Math.round(event.rotation.y));
+	zLabel.text('Z: ' + Math.round(event.rotation.z));
 
 	rotationIndicator.css('transform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
 	rotationIndicatorBack.css('transform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);

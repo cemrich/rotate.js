@@ -7,6 +7,13 @@
 			console.error('rotate.js: This browser does not support device orientation.');
 		}
 		
+		//browser detect 
+		var ua = window.navigator.userAgent;
+		this.invertAxes = false;
+		if (/Firefox/.test(ua)) {
+			this.invertAxes = true; //mobile firefox inverts all angles
+		}
+		
 		//create custom event
 		if (typeof CustomEvent === "function") {
 			this.event = new CustomEvent('rotate', {
@@ -51,7 +58,13 @@
 		var rotZ = e.alpha;
 		var orientation = window.orientation || 0;
 		
-		if (orientation == 90) {
+		if (this.invertAxes) {
+			rotX *= -1;
+			rotY *= -1;
+			rotZ *= -1;
+		}
+		
+		/* if (orientation == 90) {
 			var tempY = rotY;
 			rotY = rotX;
 			rotX = -tempY;
@@ -65,7 +78,7 @@
 			rotY = -rotX;
 			rotX = tempY;
 			rotZ += 90;
-		}
+		} */
 		
 		var upsideDownFak = (rotY < 90 && rotY > -90) ? -1 : 1;
 		rotX = rotX*upsideDownFak + 360;
