@@ -3,7 +3,7 @@
 <html>
 
 <head>
-	<title>Roatation Api</title>
+	<title>Rotation Api</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 	<script src="libs/jquery-2.0.0.min.js"></script>
 	<script src="js/rotate.js"></script>
@@ -39,6 +39,7 @@ var yLabel = $('#y');
 var zLabel = $('#z');
 
 function displayRotation(event) {
+	// invert all angles to compensate for device orientation
 	var newRotX = (event.rotation.x*-1 + 360) % 360;
 	var newRotY = (event.rotation.y*-1 + 360) % 360;
 	var newRotZ = (event.rotation.z*-1 + 360) % 360; 
@@ -56,6 +57,8 @@ function displayRotation(event) {
 	rotationIndicatorBack.css('transform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
 }
 
+/* Disable listeners for device rotation when the window
+or tab is not visible to save power. */
 function handleVisibilityChange(event) {
 	if (document[hiddenProperty]) {
 		window.removeEventListener('rotate', displayRotation);
