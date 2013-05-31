@@ -5,7 +5,6 @@
 <head>
 	<title>Rotation Api</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-	<script src="libs/jquery-2.0.0.min.js"></script>
 	<script src="js/rotate.js"></script>
 	<link rel="stylesheet" type="text/css" href="style/style.css">
 </head>
@@ -31,12 +30,12 @@ if (typeof(document.webkitHidden) !== 'undefined') {
 	hiddenProperty = 'mozHidden';
 }
 
-var rotationIndicator = $('#rotation_indicator');
-var rotationIndicatorBack = $('#rotation_indicator_back');
-var degLabel = $('#degrees');
-var xLabel = $('#x');
-var yLabel = $('#y');
-var zLabel = $('#z');
+var rotationIndicator = document.getElementById('rotation_indicator');
+var rotationIndicatorBack = document.getElementById('rotation_indicator_back');
+var degLabel = document.getElementById('degrees');
+var xLabel = document.getElementById('x');
+var yLabel = document.getElementById('y');
+var zLabel = document.getElementById('z');
 
 function displayRotation(event) {
 	// invert all angles to compensate for device orientation
@@ -48,13 +47,15 @@ function displayRotation(event) {
 	var rotYCss = 'rotatey('+ (newRotY) +'deg)';
 	var rotZCss = 'rotatez('+ (newRotZ) +'deg)';
 	
-	degLabel.text('Window-Orientation: ' + event.orientation);
-	xLabel.text('X: ' + Math.round(event.rotation.x));
-	yLabel.text('Y: ' + Math.round(event.rotation.y));
-	zLabel.text('Z: ' + Math.round(event.rotation.z));
+	degLabel.innerHTML = 'Window-Orientation: ' + event.orientation;
+	xLabel.innerHTML = 'X: ' + Math.round(event.rotation.x);
+	yLabel.innerHTML = 'Y: ' + Math.round(event.rotation.y);
+	zLabel.innerHTML = 'Z: ' + Math.round(event.rotation.z);
 
-	rotationIndicator.css('transform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
-	rotationIndicatorBack.css('transform', rotXCss + ' ' + rotYCss + ' ' + rotZCss);
+	rotationIndicator.style.webkitTransform = rotXCss + ' ' + rotYCss + ' ' + rotZCss;
+	rotationIndicatorBack.style.webkitTransform = rotXCss + ' ' + rotYCss + ' ' + rotZCss;
+	rotationIndicator.style.transform = rotXCss + ' ' + rotYCss + ' ' + rotZCss;
+	rotationIndicatorBack.style.transform = rotXCss + ' ' + rotYCss + ' ' + rotZCss;
 }
 
 /* Disable listeners for device rotation when the window
