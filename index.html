@@ -31,6 +31,7 @@ if (typeof(document.webkitHidden) !== 'undefined') {
 }
 
 var myRotateEvent = null;
+var rotateOptions = { invert: true } // invert all angles to compensate for device orientation
 var rotationIndicator = document.getElementById('rotation_indicator');
 var rotationIndicatorBack = document.getElementById('rotation_indicator_back');
 var degLabel = document.getElementById('degrees');
@@ -39,14 +40,9 @@ var yLabel = document.getElementById('y');
 var zLabel = document.getElementById('z');
 
 function displayRotation(event) {
-	// invert all angles to compensate for device orientation
-	var newRotX = (event.rotation.x*-1 + 360) % 360;
-	var newRotY = (event.rotation.y*-1 + 360) % 360;
-	var newRotZ = (event.rotation.z*-1 + 360) % 360; 
-	
-	var rotXCss = 'rotatex('+ (newRotX) +'deg)';
-	var rotYCss = 'rotatey('+ (newRotY) +'deg)';
-	var rotZCss = 'rotatez('+ (newRotZ) +'deg)';
+	var rotXCss = 'rotatex('+ (event.rotation.x) +'deg)';
+	var rotYCss = 'rotatey('+ (event.rotation.y) +'deg)';
+	var rotZCss = 'rotatez('+ (event.rotation.z) +'deg)';
 	
 	degLabel.innerHTML = 'Window-Orientation: ' + event.orientation;
 	xLabel.innerHTML = 'X: ' + Math.round(event.rotation.x);
@@ -65,7 +61,7 @@ function handleVisibilityChange(event) {
 	if (document[hiddenProperty]) {
 		myRotateEvent.stop();
 	} else {
-		myRotateEvent.start();
+		myRotateEvent.start(rotateOptions);
 	}
 }
 
@@ -73,7 +69,7 @@ function init() {
 	//create a new instance of rotate.js.
 	var myRotateEvent = new Rotate();
 	window.addEventListener('rotate', displayRotation);
-	myRotateEvent.start();
+	myRotateEvent.start(rotateOptions);
 
 	document.addEventListener(visibilityEvent, handleVisibilityChange, false);
 }

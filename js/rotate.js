@@ -22,6 +22,9 @@ var Rotate;
 			console.error('rotate.js: This browser does not support device orientation.');
 		}
 		
+		//settings
+		this.invert = false;
+		
 		//browser detect 
 		var ua = window.navigator.userAgent;
 		this.invertAxes = false;
@@ -51,7 +54,8 @@ var Rotate;
 	};
 
 	//start listening for deviceorientation
-	Rotate.prototype.start = function () {
+	Rotate.prototype.start = function (options) {
+		this.invert = (options.invert == true);
 		this.reset();
 		if (this.hasDeviceOrientation) {
 			window.addEventListener('deviceorientation', this);
@@ -103,6 +107,12 @@ var Rotate;
 		rotX = (rotX + 360) % 360;
 		rotY = (rotY + 360) % 360;
 		rotZ = (rotZ + 360) % 360;
+		
+		if (this.invert) {
+			rotX = (rotX*-1 + 360) % 360;
+			rotY = (rotY*-1 + 360) % 360;
+			rotZ = (rotZ*-1 + 360) % 360; 
+		}
 		
 		this.event.rotation.x = rotX;
 		this.event.rotation.y = rotY;
