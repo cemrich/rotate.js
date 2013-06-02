@@ -55,6 +55,9 @@ var Rotate;
 
 	//start listening for deviceorientation
 	Rotate.prototype.start = function (options) {
+		if (typeof(options) === 'undefined') {
+			options = {};
+		}
 		this.invert = (options.invert == true);
 		this.reset();
 		if (this.hasDeviceOrientation) {
