@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Rotation Api</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+	<script src="js/rotate.js"></script>
+	<link rel="stylesheet" type="text/css" href="style/parallax.css">
+</head>
+
+<body>
+	<div id="label" class="label"></div>
+	<div id="hand"></div>
+</body>
+
+<script type="text/javascript">
+
+var SPEED_X = 1.8;
+var SPEED_Y = 1.2;
+
+var myRotateEvent = null;
+var width = window.width || document.body.clientWidth;
+var height = window.height || document.body.clientHeight;
+var label = document.getElementById('label');
+var hand = document.getElementById('hand');
+
+var visibilityEvent = 'visibilitychange';
+var hiddenProperty = 'hidden';
+if (typeof(document.webkitHidden) !== 'undefined') {
+	visibilityEvent = 'webkitvisibilitychange';
+	hiddenProperty = 'webkitHidden';
+} else if (typeof(document.mozHidden) !== 'undefined') {
+	visibilityEvent = 'mozvisibilitychange';
+	hiddenProperty = 'mozHidden';
+}
+
+function onRotate(event) {
+	// transform rotation in viewport coordinates
+	var newX = -event.rotation.y + 180;
+	var newY = event.rotation.x - 180;
+	if (newX < 0) {
+		newX += 180;
+	} else {
+		newX -= 180;
+	}
+	if (newY < 0) {
+		newY += 180;
+	} else {
+		newY -= 180;
+	}
+	newX = width/2 + (newX / 360 * width * SPEED_X);
+	newY = height/2 + (newY / 360 * height * SPEED_Y);
+	
+	// change viewport according to calculated x/y values
+	if ('webkitPerspectiveOrigin' in document.body.style) {
+		document.body.style.webkitPerspectiveOrigin = newX + 'px ' + newY + 'px';
+	} else {
+		label.innerHTML = '-';
+		document.body.style.perspectiveOrigin = newX + 'px ' + newY + 'px';
+	}
+}
+
+/* Disable listeners for device rotation when the window
+or tab is not visible to save power. */
+function handleVisibilityChange(event) {
+	if (document[hiddenProperty]) {
+		myRotateEvent.stop();
+	} else {
+		myRotateEvent.start();
+	}
+}
+
+function init() {
+	//create more elements to view
+	for (var i=20; i>=0; i--) {
+		newHand = hand.cloneNode(true);
+		var x = (Math.random()-0.5) * width;
+		var y = (Math.random()-0.5) * height;
+		var z = ((i+2) * -200);
+		if ('webkitTransform' in document.body.style) {
+			newHand.style.webkitTransform = 'translate3d('+x+'px,'+y+'px,'+z+'px)';
+		} else {
+			newHand.style.transform = 'translate3d('+x+'px,'+y+'px,'+z+'px)';
+		}
+		document.body.appendChild(newHand);
+	}
+	document.body.removeChild(hand);
+
+	//create a new instance of rotate.js.
+	myRotateEvent = new Rotate();
+	window.addEventListener('rotate', onRotate);
+	myRotateEvent.start();
+
+	document.addEventListener(visibilityEvent, handleVisibilityChange, false);
+}
+
+window.onload = init;
+
+</script>
+
+</html>
