@@ -20,10 +20,16 @@ Basically you just need to include rotate.js in your html file:
 
 	<script src="js/rotate.js"></script>
 
-Now you can add and remove listeners for the 'rotate' event as you like:
+Now you can instantiate rotate.js and add you listeners for the 'rotate' event:
 
-	window.removeEventListener('rotate', displayRotation);
+	var myRotateEvent = new Rotate();
 	window.addEventListener('rotate', displayRotation);
+
+In order to receive these events you have to start rotate.js. You can also stop it whenever you like, e.g. to save power when the browser window is not visible:
+
+	myRotateEvent.start();
+	...
+	myRotateEvent.stop();
 
 The orientation event provides four attributes:
 - **x**: Rotation around the devices x axis in degress

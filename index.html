@@ -72,10 +72,10 @@ function handleVisibilityChange(event) {
 function init() {
 	//create a new instance of rotate.js.
 	var myRotateEvent = new Rotate();
+	window.addEventListener('rotate', displayRotation);
 	myRotateEvent.start();
 
 	document.addEventListener(visibilityEvent, handleVisibilityChange, false);
-	window.addEventListener('rotate', displayRotation);
 }
 
 window.onload = init;
