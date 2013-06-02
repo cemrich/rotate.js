@@ -30,6 +30,7 @@ if (typeof(document.webkitHidden) !== 'undefined') {
 	hiddenProperty = 'mozHidden';
 }
 
+var myRotateEvent = null;
 var rotationIndicator = document.getElementById('rotation_indicator');
 var rotationIndicatorBack = document.getElementById('rotation_indicator_back');
 var degLabel = document.getElementById('degrees');
@@ -62,13 +63,17 @@ function displayRotation(event) {
 or tab is not visible to save power. */
 function handleVisibilityChange(event) {
 	if (document[hiddenProperty]) {
-		window.removeEventListener('rotate', displayRotation);
+		myRotateEvent.stop();
 	} else {
-		window.addEventListener('rotate', displayRotation);
+		myRotateEvent.start();
 	}
 }
 
 function init() {
+	//create a new instance of rotate.js.
+	var myRotateEvent = new Rotate();
+	myRotateEvent.start();
+
 	document.addEventListener(visibilityEvent, handleVisibilityChange, false);
 	window.addEventListener('rotate', displayRotation);
 }

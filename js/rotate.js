@@ -11,9 +11,11 @@ Testet for:
 - firefox mobile
 */
 
+var Rotate;
+
 (function (window, document) {
 
-	function Rotate() {
+	Rotate = function Rotate() {
 		//feature detect
 		this.hasDeviceOrientation = 'DeviceOrientationEvent' in window;
 		if (!this.hasDeviceOrientation) {
@@ -115,9 +117,5 @@ Testet for:
 			return this[e.type](e);
 		}
 	};
-
-	//create a new instance of rotate.js.
-	var myRotyteEvent = new Rotate();
-	myRotyteEvent && myRotyteEvent.start();
 
 }(window, document));
