@@ -17,9 +17,11 @@ Please try the demo at http://cemrich.github.io/rotate.js
 
 ## How to use
 Basically you just need to include rotate.js in your html file:
+
 	<script src="js/rotate.js"></script>
 
 Now you can add and remove listeners for the 'rotate' event as you like:
+
 	window.removeEventListener('rotate', displayRotation);
 	window.addEventListener('rotate', displayRotation);
 
