@@ -20,7 +20,7 @@ Basically you just need to include rotate.js in your html file:
 
 	<script src="js/rotate.js"></script>
 
-Now you can add and remove listeners for the 'rotate' event as you like:
+Now you can instantiate rotate.js and add you listeners for the 'rotate' event:
 
 	window.removeEventListener('rotate', displayRotation);
 	window.addEventListener('rotate', displayRotation);
